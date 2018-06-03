@@ -48,12 +48,14 @@ mongoose.connect("mongodb://" + config.mongo.user + ":" + encodeURIComponent(mon
         _id: new mongoose.Types.ObjectId(),
         adminRoomName: 'room1-admin',
         clientRoomName: 'room1',
+        admin: admin1._id
       });
 
       var room2 = new Room({
         _id: new mongoose.Types.ObjectId(),
         adminRoomName: 'room2-admin',
         clientRoomName: 'room2',
+        admin: admin1._id
       });
 
       room1.save(function(err){
@@ -61,6 +63,7 @@ mongoose.connect("mongodb://" + config.mongo.user + ":" + encodeURIComponent(mon
           var Q1 = new Question({
             _id: new mongoose.Types.ObjectId(),
             type: 1,
+            room: room1._id,
             questionString: "Who is the Prime Minister Of India?",
             options:[
               {
@@ -86,6 +89,7 @@ mongoose.connect("mongodb://" + config.mongo.user + ":" + encodeURIComponent(mon
           var Q2 = new Question({
             _id: new mongoose.Types.ObjectId(),
             type: 1,
+            room: room1._id,
             questionString: "Who is the Prime Minister Of India? 2",
             options:[
               {
@@ -127,6 +131,7 @@ mongoose.connect("mongodb://" + config.mongo.user + ":" + encodeURIComponent(mon
           var Q1 = new Question({
             _id: new mongoose.Types.ObjectId(),
             type: 1,
+            room: room2._id,
             questionString: "Who is the President Of India?",
             options:[
               {
@@ -152,6 +157,7 @@ mongoose.connect("mongodb://" + config.mongo.user + ":" + encodeURIComponent(mon
           var Q2 = new Question({
             _id: new mongoose.Types.ObjectId(),
             type: 1,
+            room: room2._id,
             questionString: "Who is the President Of India? 2",
             options:[
               {
