@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Socket.io</title>
+        <link rel="stylesheet" href="../node-modules/bootstrap/dist/css/bootstrap.min.css">
+    </head>
+
+    <body>
+        <h1>Communicating with socket.io!</h1>
+
+        <input id="questionId" type="hidden"></input>
+        <p><input type="button" value="Poke the server" id="poke" /></p>
+        <div id="questionString"></div>
+        <div id="option1"></div>
+        <div id="option2"></div>
+        <div id="option3"></div>
+        <div id="option4"></div>
+
+        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io.connect('http://192.168.0.104:3000');
+
+            // The visitor is asked for their username...
+            var username = prompt('What\'s your username?');
+            var roomName = prompt("whats the room you are joining") ;
+            // It's sent with the signal "little_newbie" (to differentiate it from "message")
+            socket.emit('setUsername', username);
+            if (typeof(Storage) !== "undefined") {
+                // Code for localStorage/sessionStorage.
+                localStorage.setItem("username", username);
+            } else {
+                // Sorry! No Web Storage support..
+            }
+
+            socket.emit('clientJoinRoom',roomName);
+            // A dialog box is displayed when the server sends us a "message"
+            socket.on('message', function(message) {
+                console.log(message);
+                $('#questionString').text(message.questionString);
+                $('#option1').text(message.options[0].optionValue);
+
+                $('#option2').text(message.options[1].optionValue);
+
+                $('#option3').text(message.options[2].optionValue);
+
+                $('#option4').text(message.options[3].optionValue);
+
+                $('#questionId').val(message._id);
+
+            });
+
+            $('[id^=option]').click(function(e){
+              e.preventDefault();
+              var selected = $(this).text();
+              var answerObj={
+                questionID: $('#questionId').val(),
+                answer: selected
+              };
+              socket.emit("answer",answerObj);
+
+            });
+
+            // When the button is clicked, a "message" is sent to the server
+            // $('#poke').click(function () {
+            //     socket.emit('message', 'Hi server, how are you?');
+            // })
+        </script>
+    </body>
+</html>

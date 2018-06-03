@@ -3,10 +3,26 @@
   "version": "0.0.1",
   "description": "my first socket.io app",
   "dependencies": {
+    "body-parser": "^1.18.3",
+    "bootstrap": "^4.1.1",
     "express": "^4.15.2",
+    "mongodb": "^3.0.9",
+    "mongoose": "^5.1.3",
     "socket.io": "^1.7.3"
   },
   "scripts": {
     "start": "node index.js"
-  }
+  },
+  "main": "index.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sunnyshah2894/chat-example.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sunnyshah2894/chat-example/issues"
+  },
+  "homepage": "https://github.com/sunnyshah2894/chat-example#readme"
 }
