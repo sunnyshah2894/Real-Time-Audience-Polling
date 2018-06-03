@@ -155,3 +155,11 @@
 
 
 });
+
+
+
+
+mongodb://username:password@host:port/database?options...'
+mongodb://admin:admin1234@localhost:27017/myDB
+
+mongodb://7897460a5f0642c1b419d869e9b73219:sunnyshah28@6a.mongo.evennode.com:27017/7897460a5f0642c1b419d869e9b73219

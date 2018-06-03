@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    var socket = io.connect('http://192.168.0.104:3000');
+    var socket = io.connect();
 
     // The visitor is asked for their username...
     var username = prompt('What\'s your username?');
