@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Socket.io</title>
+    </head>
+
+    <body>
+
+
+
+      <form id="myform" action="/admin/publishQuestion" method="POST">
+        <select id="myRoomSelection" name="room">
+          <option selected val="Please select the room">Please select the room</option>
+        </select>
+        <input type="text" placeholder="questionString" name="questionString">
+        <input type="text" placeholder="option1" name="option1">
+        <input type="text" placeholder="option2" name="option2">
+        <input type="text" placeholder="option3" name="option3">
+        <input type="text" placeholder="option4" name="option4">
+        <select id="answer" name="answer">
+          <option value="1">option1</option>
+          <option value="2">option2</option>
+          <option value="3">option3</option>
+          <option value="4">option4</option>
+        </select>
+        <button id="main" type="button">Submit</button>
+      </form>
+      <div "questions">
+
+      </div>
+
+        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+
+        $(document).ready(function () {
+            var socket = io.connect('http://192.168.0.104:3000');
+
+            var userId = prompt("Enter the user ID: ");
+            socket.emit('joinAsAdmin', userId);
+            // The visitor is asked for their username...
+            //var username = prompt('What\'s your username?');
+            //var roomName = prompt("whats the room you are joining") ;
+            // It's sent with the signal "little_newbie" (to differentiate it from "message")
+            //socket.emit('little_newbie', username);
+            // if (typeof(Storage) !== "undefined") {
+            //     // Code for localStorage/sessionStorage.
+            //     localStorage.setItem("username", username);
+            // } else {
+            //     // Sorry! No Web Storage support..
+            // }
+
+            socket.on("getRooms",function(rooms){
+              $('#myRoomSelection option').remove();
+              $('#myRoomSelection').append('<option selected val="Please select the room">Please select the room</option>');
+              for (var i = 0; i < rooms.length; i++){
+                  var obj = rooms[i];
+                  var roomId = obj['_id'];
+                  var roomName = obj['adminRoomName']
+                  //var attrName = key;
+                  //var attrValue = obj[key];
+                  console.log(roomId);
+                  console.log(roomName);
+                  $('#myRoomSelection').append( '<option value="'+ roomId +'">' + roomName + '</option>' );
+
+              }
+              console.log("rooms to manage: " + rooms);
+            });
+
+            //socket.emit('joinRoom',roomName);
+            // A dialog box is displayed when the server sends us a "message"
+            socket.on('message', function(message) {
+                alert('The server has a message for you: ' + message);
+            })
+
+            socket.on('questionsAlreadyInRoom',function(questions){
+              console.log(questions);
+
+
+            });
+
+            socket.on('answerByUser',function(user){
+
+              console.log(user);
+
+            });
+
+            function addQuestions(questions){
+              var questionsHolder = $('#questions');
+
+              for( var i=0; i< questions.length; i++ ){
+                var question = questions[i];
+                questionsHolder.append(getQuestionFormElement(question));
+              }
+
+            }
+
+            function getQuestionFormElement(question){
+              //var div =
+            }
+
+            // When the button is clicked, a "message" is sent to the server
+            // $('#poke').click(function () {
+            //     socket.emit('message', 'Hi server, how are you?');
+            // })
+
+            $('#myRoomSelection').change(function(){
+                var value = $('#myRoomSelection option:selected').text();
+                var roomId = $('#myRoomSelection').val();
+                var roomDetails = {
+                  roomName: value,
+                  roomID: roomId
+                };
+                socket.emit('joinRoom',roomDetails);
+            });
+            // Listen to submit event on the <form> itself!
+            $('#main').click(function (e) {
+
+              // Prevent form submission which refreshes page
+              e.preventDefault();
+
+              // Serialize data
+              var formData = $("#myform").serialize();
+              console.log("sedngin "+ formData);
+              $.ajax({
+
+                  // The URL for the request
+                  url: "/admin/publishQuestion",
+
+                  // The data to send (will be converted to a query string)
+                  data: formData,
+
+                  // Whether this is a POST or GET request
+                  type: "POST",
+
+                  // The type of data we expect back
+                  dataType : "json",
+              });
+              //socket.emit('publishQuestion',formData);
+              //return false;
+              // Make AJAX request
+            });
+          });
+
+        </script>
+    </body>
+</html>
