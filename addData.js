@@ -3,7 +3,7 @@ var express = require('express');
 var http = require('http').Server(app);
 var fs = require('fs');
 var mongoose = require('mongoose');
- 
+
 var bodyParser= require('body-parser');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('node_modules'));
@@ -20,7 +20,7 @@ var Question = require('./MongoSchema/question.js');
 
 var config = {
   "mongo": {
-    "hostString": "6a.mongo.evennode.com:27017/7897460a5f0642c1b419d869e9b73219",
+    "hostString": "6b.mongo.evennode.com:27017/7897460a5f0642c1b419d869e9b73219",
     "user": "7897460a5f0642c1b419d869e9b73219",
     "db": "7897460a5f0642c1b419d869e9b73219"
   }
@@ -37,7 +37,8 @@ mongoose.connect("mongodb://" + config.mongo.user + ":" + encodeURIComponent(mon
       user:{
         firstName: 'Sunny',
         lastName: 'Shah'
-      }
+      },
+      userId: 'shahsun'
     })
 
     admin1.save(function(err){
