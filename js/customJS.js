@@ -24,6 +24,7 @@ $(document).ready(function () {
       location.reload();
 
     });
+    console.log("join room " + roomName);
     socket.emit('clientJoinRoom',roomName);
     // A dialog box is displayed when the server sends us a "message"
     socket.on('questionAvailable', function(message) {
