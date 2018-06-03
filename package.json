@@ -11,7 +11,7 @@
     "socket.io": "^1.7.3"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node server2.js"
   },
   "main": "index.js",
   "devDependencies": {},
