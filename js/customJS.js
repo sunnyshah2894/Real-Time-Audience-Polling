@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    var socket = io.connect('https://audiencepoll.herokuapp.com');
+    var socket = io();
 
     // The visitor is asked for their username...
     var username = prompt('What\'s your username?');
