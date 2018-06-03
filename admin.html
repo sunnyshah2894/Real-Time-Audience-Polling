@@ -35,7 +35,7 @@
         <script>
 
         $(document).ready(function () {
-            var socket = io.connect('https://audiencepoll.herokuapp.com');
+            var socket = io.connect('');
 
             var userId = prompt("Enter the user ID: ");
             socket.emit('joinAsAdmin', userId);
