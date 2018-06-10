@@ -9,10 +9,10 @@
 
 
       <input type="hidden" id="adminID" name="adminID">
+      <select id="myRoomSelection" name="room">
+        <option selected val="Please select the room">Please select the room</option>
+      </select>
       <form id="myform" action="/admin/publishQuestion" method="POST">
-        <select id="myRoomSelection" name="room">
-          <option selected val="Please select the room">Please select the room</option>
-        </select>
         <input type="text" placeholder="questionString" name="questionString">
         <input type="text" placeholder="option1" name="option1">
         <input type="text" placeholder="option2" name="option2">
@@ -24,9 +24,13 @@
           <option value="3">option3</option>
           <option value="4">option4</option>
         </select>
-        <button id="main" type="button">Submit</button>
+        <!-- <button id="publishNewQuestion" type="button">Submit</button> -->
+        <input type='submit' id='publishNewQuestion' value='Submit' />
       </form>
-      <div "questions">
+
+
+
+      <div id="publishableQuestions">
 
       </div>
 
@@ -34,6 +38,22 @@
         <script src="/socket.io/socket.io.js"></script>
         <script>
 
+        $.fn.serializeObject = function()
+        {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function() {
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
         $(document).ready(function () {
             var socket = io.connect();
 
@@ -81,7 +101,7 @@
 
             socket.on('questionsAlreadyInRoom',function(questions){
               console.log(questions);
-
+              addQuestions(questions);
 
             });
             socket.on('refresh',function(message){
@@ -100,13 +120,21 @@
 
               for( var i=0; i< questions.length; i++ ){
                 var question = questions[i];
-                questionsHolder.append(getQuestionFormElement(question));
+                questionsHolder.append(getQuestionFormElement(question,i));
               }
 
             }
 
-            function getQuestionFormElement(question){
-              //var div =
+            function getQuestionFormElement(question,questionNumber){
+
+              $("#publishableQuestions").append('<form class="ExistingQuestion" id="questionform'+questionNumber+'" method="POST">');
+                $('#publishableQuestions #questionform'+questionNumber).append('<input type="hidden" id="questionId" value="'+question._id+'" name="questionId"/>');
+                $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="questionString" name="questionString" value="'+question.questionString+'">');
+                $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="option1" name="option1" value="'+question.options[0].optionValue+'">');
+                $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="option1" name="option1" value="'+question.options[1].optionValue+'">');
+                $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="option1" name="option1" value="'+question.options[2].optionValue+'">');
+                $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="option1" name="option1" value="'+question.options[3].optionValue+'">');
+                $("#publishableQuestions #questionform"+questionNumber).append('<input type="submit" value="Submit" id="publishExistingQuestion'+questionNumber+'" />');
             }
 
             // When the button is clicked, a "message" is sent to the server
@@ -121,32 +149,46 @@
                   roomName: value,
                   roomID: roomId
                 };
-                socket.emit('joinRoom',roomDetails);
+                socket.emit('serverJoinRoom',roomDetails);
             });
+
+            $('#publishableQuestions').on('click', 'form', function(e){
+
+                e.preventDefault();
+                // do something here
+                var formData = JSON.stringify($(this).serializeObject());
+                console.log( formData ) ;
+                socket.emit('publishExistingQuestion',JSON.parse(JSON.stringify(formData)));
+
+            });
+
             // Listen to submit event on the <form> itself!
-            $('#main').click(function (e) {
+            $('#publishNewQuestion').click(function (e) {
 
               // Prevent form submission which refreshes page
               e.preventDefault();
 
               // Serialize data
-              var formData = $("#myform").serialize();
+              var formData = $("#myform").serializeObject();
+              formData["roomID"] = $('#myRoomSelection').val();
               console.log("sedngin "+ formData);
-              $.ajax({
+              // $.ajax({
+              //
+              //     // The URL for the request
+              //     url: "/admin/publishQuestion",
+              //
+              //     // The data to send (will be converted to a query string)
+              //     data: formData,
+              //
+              //     // Whether this is a POST or GET request
+              //     type: "POST",
+              //
+              //     // The type of data we expect back
+              //     dataType : "json",
+              // });
 
-                  // The URL for the request
-                  url: "/admin/publishQuestion",
-
-                  // The data to send (will be converted to a query string)
-                  data: formData,
-
-                  // Whether this is a POST or GET request
-                  type: "POST",
-
-                  // The type of data we expect back
-                  dataType : "json",
-              });
-              //socket.emit('publishQuestion',formData);
+              //console.log("serialized json : " + $("#myform").serializeJSON());
+              socket.emit('publishNewQuestion',JSON.parse(JSON.stringify(formData)));
               //return false;
               // Make AJAX request
             });
