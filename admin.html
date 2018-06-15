@@ -131,9 +131,9 @@
                 $('#publishableQuestions #questionform'+questionNumber).append('<input type="hidden" id="questionId" value="'+question._id+'" name="questionId"/>');
                 $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="questionString" name="questionString" value="'+question.questionString+'">');
                 $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="option1" name="option1" value="'+question.options[0].optionValue+'">');
-                $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="option1" name="option1" value="'+question.options[1].optionValue+'">');
-                $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="option1" name="option1" value="'+question.options[2].optionValue+'">');
-                $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="option1" name="option1" value="'+question.options[3].optionValue+'">');
+                $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="option2" name="option2" value="'+question.options[1].optionValue+'">');
+                $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="option3" name="option3" value="'+question.options[2].optionValue+'">');
+                $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="option4" name="option4" value="'+question.options[3].optionValue+'">');
                 $("#publishableQuestions #questionform"+questionNumber).append('<input type="submit" value="Submit" id="publishExistingQuestion'+questionNumber+'" />');
             }
 
