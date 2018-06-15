@@ -98,8 +98,9 @@
             socket.on('message', function(message) {
                 alert('The server has a message for you: ' + message);
             })
-
+            var questionsInRoom = {};
             socket.on('questionsAlreadyInRoom',function(questions){
+              questionsInRoom = questions;
               console.log(questions);
               addQuestions(questions);
 
@@ -114,6 +115,17 @@
               console.log(user);
 
             });
+            function findElement(arr, propName, propValue) {
+              console.log("propVlaue is " + propValue);
+              for (var i=0; i < arr.length; i++){
+                console.log("for i = " + i + " value is " + arr[i][propName]);
+                if (arr[i][propName] === propValue)
+                  return arr[i];
+
+                }
+
+              // will return undefined if not found; you could return a default instead
+            }
 
             function addQuestions(questions){
               var questionsHolder = $('#questions');
@@ -157,8 +169,11 @@
                 e.preventDefault();
                 // do something here
                 var formData = JSON.stringify($(this).serializeObject());
-                console.log( formData ) ;
-                socket.emit('publishExistingQuestion',JSON.parse(JSON.stringify(formData)));
+                var formDataObj = $(this).serializeObject();
+                console.log( "as per the form data : " + formData );
+                var dataFromQuestionJson = findElement(questionsInRoom,"_id",formDataObj["questionId"]);
+                console.log( dataFromQuestionJson ) ;
+                socket.emit('publishExistingQuestion',dataFromQuestionJson);//JSON.parse(JSON.stringify(formData)));
 
             });
 
