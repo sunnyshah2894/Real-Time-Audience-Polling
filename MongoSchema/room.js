@@ -11,7 +11,9 @@ var roomSchema = mongoose.Schema({
     admin: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Admin'
-    }
+    },
+    isFinished: Boolean,
+    currQuestion: mongoose.Schema.Types.ObjectId
 
 });
 

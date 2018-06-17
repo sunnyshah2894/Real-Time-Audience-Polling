@@ -1,214 +1,268 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <title>Socket.io</title>
-    </head>
+<head>
+  <meta charset="utf-8">
+  <title>Admin panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Socket.io</title>
+  <link rel="stylesheet" href="./bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./customCSS.css">
+</head>
 
-    <body>
+<body>
 
+<div class="container">
+  <input type="hidden" id="adminID" name="adminID">
+  <select id="myRoomSelection" name="room">
+    <option selected val="Please select the room">Please select the room</option>
+  </select>
+  <form id="myform" action="/admin/publishQuestion" method="POST">
+    <input type="text" placeholder="questionString" name="questionString">
+    <input type="text" placeholder="option1" name="option1">
+    <input type="text" placeholder="option2" name="option2">
+    <input type="text" placeholder="option3" name="option3">
+    <input type="text" placeholder="option4" name="option4">
+    <select id="answer" name="answer">
+      <option value="1">option1</option>
+      <option value="2">option2</option>
+      <option value="3">option3</option>
+      <option value="4">option4</option>
+    </select>
+    <!-- <button id="publishNewQuestion" type="button">Submit</button> -->
+    <input type='submit' id='publishNewQuestion' value='Submit' />
+  </form>
 
-      <input type="hidden" id="adminID" name="adminID">
-      <select id="myRoomSelection" name="room">
-        <option selected val="Please select the room">Please select the room</option>
-      </select>
-      <form id="myform" action="/admin/publishQuestion" method="POST">
-        <input type="text" placeholder="questionString" name="questionString">
-        <input type="text" placeholder="option1" name="option1">
-        <input type="text" placeholder="option2" name="option2">
-        <input type="text" placeholder="option3" name="option3">
-        <input type="text" placeholder="option4" name="option4">
-        <select id="answer" name="answer">
-          <option value="1">option1</option>
-          <option value="2">option2</option>
-          <option value="3">option3</option>
-          <option value="4">option4</option>
-        </select>
-        <!-- <button id="publishNewQuestion" type="button">Submit</button> -->
-        <input type='submit' id='publishNewQuestion' value='Submit' />
-      </form>
+  <form id="addQuestionForm" action="/admin/addQuestion" method="POST">
+    <input type="text" placeholder="questionString" name="questionString">
+    <input type="text" placeholder="option1" name="option1">
+    <input type="text" placeholder="option2" name="option2">
+    <input type="text" placeholder="option3" name="option3">
+    <input type="text" placeholder="option4" name="option4">
+    <select id="answer" name="answer">
+      <option value="1">option1</option>
+      <option value="2">option2</option>
+      <option value="3">option3</option>
+      <option value="4">option4</option>
+    </select>
+    <!-- <button id="publishNewQuestion" type="button">Submit</button> -->
+    <input type='submit' id='addNewQuestion' value='Add' />
+  </form>
 
+  <div id="publishableQuestions">
 
-
-      <div id="publishableQuestions">
-
+  </div>
+  <div id="adminGetUserNameModal" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="myModalLabel">Enter admin username:</h3>
+        </div>
+        <div class="modal-body">
+          <input class="form-control form-control-lg" id="username" type="text" placeholder="Enter username">
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" id="submitUsername">Submit</button>
+        </div>
       </div>
+    </div>
+  </div>
 
-        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-        <script src="/socket.io/socket.io.js"></script>
-        <script>
+  <div id="snackbar">Thanks for answering!</div>
+</div>
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script src="./bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
 
-        $.fn.serializeObject = function()
-        {
-            var o = {};
-            var a = this.serializeArray();
-            $.each(a, function() {
-                if (o[this.name] !== undefined) {
-                    if (!o[this.name].push) {
-                        o[this.name] = [o[this.name]];
-                    }
-                    o[this.name].push(this.value || '');
-                } else {
-                    o[this.name] = this.value || '';
-                }
-            });
-            return o;
-        };
-        $(document).ready(function () {
-            var socket = io.connect();
+  $.fn.serializeObject = function()
+  {
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+      if (o[this.name] !== undefined) {
+        if (!o[this.name].push) {
+          o[this.name] = [o[this.name]];
+        }
+        o[this.name].push(this.value || '');
+      } else {
+        o[this.name] = this.value || '';
+      }
+    });
+    return o;
+  };
+  $(document).ready(function () {
+    var socket = io.connect();
 
-            var userId = prompt("Enter the user ID: ");
-            socket.emit('joinAsAdmin', userId);
-            socket.on('adminId',function(adminId){
+    //var userId = prompt("Enter the user ID: ");
+    $('#adminGetUserNameModal').modal();
 
-                $('#adminID').val(adminId);
+    $('#submitUsername').click(function(e){
+      var username = $('#username').val();
+      socket.emit('joinAsAdmin',username );
+      $('#adminGetUserNameModal').modal('hide');
+    });
 
-            });
-            // The visitor is asked for their username...
-            //var username = prompt('What\'s your username?');
-            //var roomName = prompt("whats the room you are joining") ;
-            // It's sent with the signal "little_newbie" (to differentiate it from "message")
-            //socket.emit('little_newbie', username);
-            // if (typeof(Storage) !== "undefined") {
-            //     // Code for localStorage/sessionStorage.
-            //     localStorage.setItem("username", username);
-            // } else {
-            //     // Sorry! No Web Storage support..
-            // }
+    socket.on('adminId',function(adminId){
 
-            socket.on("getRooms",function(rooms){
-              $('#myRoomSelection option').remove();
-              $('#myRoomSelection').append('<option selected val="Please select the room">Please select the room</option>');
-              for (var i = 0; i < rooms.length; i++){
-                  var obj = rooms[i];
-                  var roomId = obj['_id'];
-                  var roomName = obj['adminRoomName']
-                  //var attrName = key;
-                  //var attrValue = obj[key];
-                  console.log(roomId);
-                  console.log(roomName);
-                  $('#myRoomSelection').append( '<option value="'+ roomId +'">' + roomName + '</option>' );
+      $('#adminID').val(adminId);
 
-              }
-              console.log("rooms to manage: " + rooms);
-            });
+    });
+    // The visitor is asked for their username...
+    //var username = prompt('What\'s your username?');
+    //var roomName = prompt("whats the room you are joining") ;
+    // It's sent with the signal "little_newbie" (to differentiate it from "message")
+    //socket.emit('little_newbie', username);
+    // if (typeof(Storage) !== "undefined") {
+    //     // Code for localStorage/sessionStorage.
+    //     localStorage.setItem("username", username);
+    // } else {
+    //     // Sorry! No Web Storage support..
+    // }
 
-            //socket.emit('joinRoom',roomName);
-            // A dialog box is displayed when the server sends us a "message"
-            socket.on('message', function(message) {
-                alert('The server has a message for you: ' + message);
-            })
-            var questionsInRoom = {};
-            socket.on('questionsAlreadyInRoom',function(questions){
-              questionsInRoom = questions;
-              console.log(questions);
-              addQuestions(questions);
+    socket.on("getRooms",function(rooms){
+      $('#myRoomSelection option').remove();
+      $('#myRoomSelection').append('<option selected val="Please select the room">Please select the room</option>');
+      for (var i = 0; i < rooms.length; i++){
+        var obj = rooms[i];
+        var roomId = obj['_id'];
+        var roomName = obj['adminRoomName']
+        //var attrName = key;
+        //var attrValue = obj[key];
+        console.log(roomId);
+        console.log(roomName);
+        $('#myRoomSelection').append( '<option value="'+ roomId +'">' + roomName + '</option>' );
 
-            });
-            socket.on('refresh',function(message){
+      }
+      console.log("rooms to manage: " + rooms);
+    });
 
-              location.reload();
+    //socket.emit('joinRoom',roomName);
+    // A dialog box is displayed when the server sends us a "message"
+    socket.on('message', function(message) {
+      alert('The server has a message for you: ' + message);
+    })
+    var questionsInRoom = {};
+    socket.on('questionsAlreadyInRoom',function(questions){
+      questionsInRoom = questions;
+      console.log(questions);
+      addQuestions(questions);
 
-            });
-            socket.on('answerByUser',function(user){
+    });
+    socket.on('refresh',function(message){
 
-              console.log(user);
+      location.reload();
 
-            });
-            function findElement(arr, propName, propValue) {
-              console.log("propVlaue is " + propValue);
-              for (var i=0; i < arr.length; i++){
-                console.log("for i = " + i + " value is " + arr[i][propName]);
-                if (arr[i][propName] === propValue)
-                  return arr[i];
+    });
+    socket.on('answerByUser',function(user){
 
-                }
+      console.log(user);
 
-              // will return undefined if not found; you could return a default instead
-            }
+    });
+    function findElement(arr, propName, propValue) {
+      console.log("propVlaue is " + propValue);
+      for (var i=0; i < arr.length; i++){
+        console.log("for i = " + i + " value is " + arr[i][propName]);
+        if (arr[i][propName] === propValue)
+        return arr[i];
 
-            function addQuestions(questions){
-              var questionsHolder = $('#questions');
+      }
 
-              for( var i=0; i< questions.length; i++ ){
-                var question = questions[i];
-                questionsHolder.append(getQuestionFormElement(question,i));
-              }
+      // will return undefined if not found; you could return a default instead
+    }
 
-            }
+    function addQuestions(questions){
+      var questionsHolder = $('#publishableQuestions');
+      questionsHolder.empty();
 
-            function getQuestionFormElement(question,questionNumber){
+      for( var i=0; i< questions.length; i++ ){
+        var question = questions[i];
+        getQuestionFormElement(question,i);
+      }
 
-              $("#publishableQuestions").append('<form class="ExistingQuestion" id="questionform'+questionNumber+'" method="POST">');
-                $('#publishableQuestions #questionform'+questionNumber).append('<input type="hidden" id="questionId" value="'+question._id+'" name="questionId"/>');
-                $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="questionString" name="questionString" value="'+question.questionString+'">');
-                $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="option1" name="option1" value="'+question.options[0].optionValue+'">');
-                $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="option2" name="option2" value="'+question.options[1].optionValue+'">');
-                $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="option3" name="option3" value="'+question.options[2].optionValue+'">');
-                $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="option4" name="option4" value="'+question.options[3].optionValue+'">');
-                $("#publishableQuestions #questionform"+questionNumber).append('<input type="submit" value="Submit" id="publishExistingQuestion'+questionNumber+'" />');
-            }
+    }
 
-            // When the button is clicked, a "message" is sent to the server
-            // $('#poke').click(function () {
-            //     socket.emit('message', 'Hi server, how are you?');
-            // })
+    function getQuestionFormElement(question,questionNumber){
 
-            $('#myRoomSelection').change(function(){
-                var value = $('#myRoomSelection option:selected').text();
-                var roomId = $('#myRoomSelection').val();
-                var roomDetails = {
-                  roomName: value,
-                  roomID: roomId
-                };
-                socket.emit('serverJoinRoom',roomDetails);
-            });
+      $("#publishableQuestions").append('<form class="ExistingQuestion" id="questionform'+questionNumber+'" method="POST">');
+      $('#publishableQuestions #questionform'+questionNumber).append('<input type="hidden" id="questionId" value="'+question._id+'" name="questionId"/>');
+      $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="questionString" name="questionString" value="'+question.questionString+'">');
+      $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="option1" name="option1" value="'+question.options[0].optionValue+'">');
+      $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="option2" name="option2" value="'+question.options[1].optionValue+'">');
+      $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="option3" name="option3" value="'+question.options[2].optionValue+'">');
+      $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="option4" name="option4" value="'+question.options[3].optionValue+'">');
+      $("#publishableQuestions #questionform"+questionNumber).append('<input type="submit" value="Submit" id="publishExistingQuestion'+questionNumber+'" />');
+    }
 
-            $('#publishableQuestions').on('click', 'form', function(e){
+    // When the button is clicked, a "message" is sent to the server
+    // $('#poke').click(function () {
+    //     socket.emit('message', 'Hi server, how are you?');
+    // })
 
-                e.preventDefault();
-                // do something here
-                var formData = JSON.stringify($(this).serializeObject());
-                var formDataObj = $(this).serializeObject();
-                console.log( "as per the form data : " + formData );
-                var dataFromQuestionJson = findElement(questionsInRoom,"_id",formDataObj["questionId"]);
-                console.log( dataFromQuestionJson ) ;
-                socket.emit('publishExistingQuestion',dataFromQuestionJson);//JSON.parse(JSON.stringify(formData)));
+    $('#myRoomSelection').change(function(){
+      var value = $('#myRoomSelection option:selected').text();
+      var roomId = $('#myRoomSelection').val();
+      var roomDetails = {
+        roomName: value,
+        roomID: roomId
+      };
+      socket.emit('serverJoinRoom',roomDetails);
+    });
 
-            });
+    $('#publishableQuestions').on('click', 'form', function(e){
 
-            // Listen to submit event on the <form> itself!
-            $('#publishNewQuestion').click(function (e) {
+      e.preventDefault();
+      // do something here
+      var formData = JSON.stringify($(this).serializeObject());
+      var formDataObj = $(this).serializeObject();
+      console.log( "as per the form data : " + formData );
+      var dataFromQuestionJson = findElement(questionsInRoom,"_id",formDataObj["questionId"]);
+      console.log( dataFromQuestionJson ) ;
+      socket.emit('publishExistingQuestion',dataFromQuestionJson);//JSON.parse(JSON.stringify(formData)));
 
-              // Prevent form submission which refreshes page
-              e.preventDefault();
+    });
 
-              // Serialize data
-              var formData = $("#myform").serializeObject();
-              formData["roomID"] = $('#myRoomSelection').val();
-              console.log("sedngin "+ formData);
-              // $.ajax({
-              //
-              //     // The URL for the request
-              //     url: "/admin/publishQuestion",
-              //
-              //     // The data to send (will be converted to a query string)
-              //     data: formData,
-              //
-              //     // Whether this is a POST or GET request
-              //     type: "POST",
-              //
-              //     // The type of data we expect back
-              //     dataType : "json",
-              // });
+    $('#addNewQuestion').click(function(e){
 
-              //console.log("serialized json : " + $("#myform").serializeJSON());
-              socket.emit('publishNewQuestion',JSON.parse(JSON.stringify(formData)));
-              //return false;
-              // Make AJAX request
-            });
-          });
+      e.preventDefault();
+      var formData = $('#addQuestionForm').serializeObject();
+      formData["roomID"] = $('#myRoomSelection').val();
+      socket.emit('adminAddNewQuestion',JSON.parse(JSON.stringify(formData)));
 
-        </script>
-    </body>
+    });
+
+    // Listen to submit event on the <form> itself!
+    $('#publishNewQuestion').click(function (e) {
+
+      // Prevent form submission which refreshes page
+      e.preventDefault();
+
+      // Serialize data
+      var formData = $("#myform").serializeObject();
+      formData["roomID"] = $('#myRoomSelection').val();
+      console.log("sedngin "+ formData);
+      // $.ajax({
+      //
+      //     // The URL for the request
+      //     url: "/admin/publishQuestion",
+      //
+      //     // The data to send (will be converted to a query string)
+      //     data: formData,
+      //
+      //     // Whether this is a POST or GET request
+      //     type: "POST",
+      //
+      //     // The type of data we expect back
+      //     dataType : "json",
+      // });
+
+      //console.log("serialized json : " + $("#myform").serializeJSON());
+      socket.emit('publishNewQuestion',JSON.parse(JSON.stringify(formData)));
+      //return false;
+      // Make AJAX request
+    });
+  });
+
+  </script>
+</body>
 </html>

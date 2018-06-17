@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Bootswatch: Default Bootstrap</title>
+        <title>Audience-Poll Room</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <title>Socket.io</title>
@@ -69,7 +69,40 @@
             </div>
         </div>
 
+        <div id="myUsernameChooserModal" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3 id="myModalLabel">Enter your userID:</h3>
+              </div>
+              <div class="modal-body">
+                <input class="form-control form-control-lg" id="userID" type="text" placeholder="Enter userID">
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-primary" id="submitUserID">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
+        <div id="myRoomChooserModal" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3 id="myModalLabel">Enter the room to Join:</h3>
+              </div>
+              <div class="modal-body">
+                <input class="form-control form-control-lg" id="roomName" type="text" placeholder="Enter the room name">
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-primary" id="joinRoom">Join</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div id="snackbar">Thanks for answering!</div>
 
         <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
         <script src="./bootstrap/dist/js/bootstrap.min.js"></script>
