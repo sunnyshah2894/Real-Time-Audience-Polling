@@ -190,3 +190,15 @@ body {
 
 }
 /* End of MOBILE phones */
+
+.card{
+  margin-bottom: 10px;
+  text-align: center;
+}
+.clickable{
+  cursor: pointer !important;
+}
+
+.clickable:hover{
+  background-color: #dddddd;
+}
