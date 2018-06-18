@@ -74,13 +74,13 @@ $(document).ready(function () {
 
           console.log(message);
           $('#questionString').text(message.questionString);
-          $('#option1').text(message.options[0].optionValue);
+          $('#option1').text(message.options[0].optionValue || "Option not Avalaible");
 
-          $('#option2').text(message.options[1].optionValue);
+          $('#option2').text(message.options[1].optionValue || "Option not Avalaible");
 
-          $('#option3').text(message.options[2].optionValue);
+          $('#option3').text(message.options[2].optionValue || "Option not Avalaible");
 
-          $('#option4').text(message.options[3].optionValue);
+          $('#option4').text(message.options[3].optionValue || "Option not Avalaible");
 
           $('#questionId').val(message._id);
         }
@@ -97,9 +97,13 @@ $(document).ready(function () {
     $('[id^=option]').click(function(e){
       e.preventDefault();
       var selected = $(this).text();
+      var optionName = this.id;
+      alert(optionName);
+      var answerSelectIndex = parseInt(optionName[optionName.length -1]);
       var answerObj={
         questionID: $('#questionId').val(),
-        answer: selected
+        answer: selected,
+        answerIndex: answerSelectIndex
       };
       questionsAnswered.push(answerObj.questionID);
       if(localStorageAvailable){
