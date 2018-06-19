@@ -14,7 +14,8 @@ var questionSchema = mongoose.Schema({
     roomID:{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Room'
-    }
+    },
+    time: Date
 
 });
 
