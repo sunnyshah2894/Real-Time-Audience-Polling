@@ -98,7 +98,6 @@ $(document).ready(function () {
       e.preventDefault();
       var selected = $(this).text();
       var optionName = this.id;
-      alert(optionName);
       var answerSelectIndex = parseInt(optionName[optionName.length -1]);
       var answerObj={
         questionID: $('#questionId').val(),
