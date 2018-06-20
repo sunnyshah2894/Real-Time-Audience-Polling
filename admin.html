@@ -10,29 +10,119 @@
   <link rel="stylesheet" href="./customCSS.css">
 </head>
 
-<body>
+<body style="margin-top: 20px;">
 
 <div class="container">
   <input type="hidden" id="adminID" name="adminID">
-  <select id="myRoomSelection" name="room">
+  <select class="custom-select custom-select-lg mb-3" id="myRoomSelection" name="room">
     <option selected val="Please select the room">Please select the room</option>
   </select>
-  <form id="myform" action="/admin/publishQuestion" method="POST">
-    <input type="text" placeholder="questionString" name="questionString">
-    <input type="text" placeholder="option1" name="option1">
-    <input type="text" placeholder="option2" name="option2">
-    <input type="text" placeholder="option3" name="option3">
-    <input type="text" placeholder="option4" name="option4">
-    <select id="answer" name="answer">
-      <option value="1">option1</option>
-      <option value="2">option2</option>
-      <option value="3">option3</option>
-      <option value="4">option4</option>
-    </select>
-    <!-- <button id="publishNewQuestion" type="button">Submit</button> -->
-    <input type='submit' id='publishNewQuestion' value='Submit' />
-  </form>
 
+  <div class="card">
+    <div class="card-header">
+      Add and Publish a new question
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">Add your question below</h5>
+      <p class="card-text">
+        <form id="myform" action="/admin/publishQuestion" method="POST">
+          <div class="form-group">
+            <label class="float-left" for="QuestionString">Enter the new question:</label>
+            <textarea class="form-control" name="questionString" id="QuestionString" rows="3"></textarea>
+          </div>
+          <!-- <input type="text" placeholder="questionString" name="questionString"> -->
+          <div class="form-row">
+            <div class="form-group col-md-6 col-xs-12">
+                <label class="float-left" for="inputPassword4">Option1</label>
+                <input type="text" class="form-control" placeholder="option1" name="option1">
+            </div>
+            <div class="form-group col-md-6 col-xs-12">
+                <label class="float-left" for="inputPassword4">Option2</label>
+                <input type="text" class="form-control" placeholder="option2" name="option2">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6 col-xs-12">
+                <label class="float-left" for="inputPassword4">Option3</label>
+                <input type="text" class="form-control" placeholder="option3" name="option3">
+            </div>
+            <div class="form-group col-md-6 col-xs-12">
+                <label class="float-left" for="inputPassword4">Option4</label>
+                <input type="text" class="form-control" placeholder="option4" name="option4">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6 col-xs-12">
+              <select class="custom-select custom-select-sm" id="answer" name="answer">
+                <option value="1">option1</option>
+                <option value="2">option2</option>
+                <option value="3">option3</option>
+                <option value="4">option4</option>
+              </select>
+            </div>
+          </div>
+          <!-- <button id="publishNewQuestion" type="button">Submit</button> -->
+            <div class="form-group col-md-6 col-xs-12">
+                <input class="btn btn-primary btn-block" type='submit' id='publishNewQuestion' value='Publish' />
+            </div>
+        </form>
+      </p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      Add a new question to the Room
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">Add your question below</h5>
+      <p class="card-text">
+        <form id="addQuestionForm" action="/admin/addQuestion" method="POST">
+          <div class="form-group">
+            <label class="float-left" for="QuestionString">Enter the new question:</label>
+            <textarea class="form-control" name="questionString" id="QuestionString" rows="3"></textarea>
+          </div>
+          <!-- <input type="text" placeholder="questionString" name="questionString"> -->
+          <div class="form-row">
+            <div class="form-group col-md-6 col-xs-12">
+                <label class="float-left" for="inputPassword4">Option1</label>
+                <input type="text" class="form-control" placeholder="option1" name="option1">
+            </div>
+            <div class="form-group col-md-6 col-xs-12">
+                <label class="float-left" for="inputPassword4">Option2</label>
+                <input type="text" class="form-control" placeholder="option2" name="option2">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6 col-xs-12">
+                <label class="float-left" for="inputPassword4">Option3</label>
+                <input type="text" class="form-control" placeholder="option3" name="option3">
+            </div>
+            <div class="form-group col-md-6 col-xs-12">
+                <label class="float-left" for="inputPassword4">Option4</label>
+                <input type="text" class="form-control" placeholder="option4" name="option4">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6 col-xs-12">
+              <select class="custom-select custom-select-sm" id="answer" name="answer">
+                <option value="1">option1</option>
+                <option value="2">option2</option>
+                <option value="3">option3</option>
+                <option value="4">option4</option>
+              </select>
+            </div>
+          </div>
+          <!-- <button id="publishNewQuestion" type="button">Submit</button> -->
+            <div class="form-group col-md-6 col-xs-12">
+                <input class="btn btn-primary btn-block" type='submit' id='addNewQuestion' value='Add Question' />
+            </div>
+        </form>
+      </p>
+    </div>
+  </div>
+
+<!--
   <form id="addQuestionForm" action="/admin/addQuestion" method="POST">
     <input type="text" placeholder="questionString" name="questionString">
     <input type="text" placeholder="option1" name="option1">
@@ -45,13 +135,23 @@
       <option value="3">option3</option>
       <option value="4">option4</option>
     </select>
-    <!-- <button id="publishNewQuestion" type="button">Submit</button> -->
     <input type='submit' id='addNewQuestion' value='Add' />
-  </form>
+  </form> -->
 
-  <div id="publishableQuestions">
+  <div class="card">
+    <div class="card-header">
+      Publish Existing Questions
+    </div>
+    <div class="card-body">
+      <p class="card-text">
 
+        <div id="publishableQuestions">
+
+        </div>
+      </p>
+    </div>
   </div>
+
   <div id="adminGetUserNameModal" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -102,6 +202,14 @@
       socket.emit('joinAsAdmin',username );
       $('#adminGetUserNameModal').modal('hide');
     });
+
+    function showSnakbar(messageToShow) {
+        var x = document.getElementById("snackbar");
+        $('#snackbar').html(messageToShow);
+        x.className = "show";
+        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+    }
+
 
     socket.on('adminId',function(adminId){
 
@@ -184,14 +292,14 @@
 
     function getQuestionFormElement(question,questionNumber){
 
-      $("#publishableQuestions").append('<form class="ExistingQuestion" id="questionform'+questionNumber+'" method="POST">');
-      $('#publishableQuestions #questionform'+questionNumber).append('<input type="hidden" id="questionId" value="'+question._id+'" name="questionId"/>');
-      $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="questionString" name="questionString" value="'+question.questionString+'">');
-      $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="option1" name="option1" value="'+question.options[0].optionValue+'">');
-      $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="option2" name="option2" value="'+question.options[1].optionValue+'">');
-      $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="option3" name="option3" value="'+question.options[2].optionValue+'">');
-      $('#publishableQuestions #questionform'+questionNumber).append('<input type="text" placeholder="option4" name="option4" value="'+question.options[3].optionValue+'">');
-      $("#publishableQuestions #questionform"+questionNumber).append('<input type="submit" value="Submit" id="publishExistingQuestion'+questionNumber+'" />');
+      $("#publishableQuestions").append('<div class="card"><div class="card-body"><form class="ExistingQuestion" id="questionform'+questionNumber+'" method="POST">');
+      $('#publishableQuestions #questionform'+questionNumber).append('<input type="hidden" disabled id="questionId" value="'+question._id+'" name="questionId"/>');
+      $('#publishableQuestions #questionform'+questionNumber).append('<div class="form-group"><input class="form-control" type="text" disabled placeholder="questionString" name="questionString" value="'+question.questionString+'"></div>');
+      $('#publishableQuestions #questionform'+questionNumber).append('<div class="form-row"><div class="form-group col-md-3 col-xs-12"><input type="text" class="form-control" disabled placeholder="option1" name="option1" value="'+question.options[0].optionValue+'"></div><div class="form-group col-md-3 col-xs-12"><input type="text" class="form-control" disabled placeholder="option2" name="option2" value="'+question.options[1].optionValue+'"></div><div class="form-group col-md-3 col-xs-12"><input type="text" class="form-control" disabled placeholder="option3" name="option3" value="'+question.options[2].optionValue+'"></div><div class="form-group col-md-3 col-xs-12"><input type="text" class="form-control" disabled placeholder="option4" name="option4" value="'+question.options[3].optionValue+'"></div></div>');
+      //$('#publishableQuestions #questionform'+questionNumber).append('<div class="form-group col-md-3 col-xs-12"><input type="text" class="form-control" disabled placeholder="option2" name="option2" value="'+question.options[1].optionValue+'"></div>');
+      //$('#publishableQuestions #questionform'+questionNumber).append('<div class="form-group col-md-3 col-xs-12"><input type="text" class="form-control" disabled placeholder="option3" name="option3" value="'+question.options[2].optionValue+'"></div>');
+      //$('#publishableQuestions #questionform'+questionNumber).append('<div class="form-group col-md-3 col-xs-12"><input type="text" class="form-control" disabled placeholder="option4" name="option4" value="'+question.options[3].optionValue+'"></div></div>');
+      $("#publishableQuestions #questionform"+questionNumber).append('<input class="btn btn-primary" type="submit" value="Submit" id="publishExistingQuestion'+questionNumber+'" />');
     }
 
     // When the button is clicked, a "message" is sent to the server
@@ -213,12 +321,17 @@
 
       e.preventDefault();
       // do something here
+      var disabled = $(this).find(':input:disabled').removeAttr('disabled');
+
+
       var formData = JSON.stringify($(this).serializeObject());
       var formDataObj = $(this).serializeObject();
       console.log( "as per the form data : " + formData );
       var dataFromQuestionJson = findElement(questionsInRoom,"_id",formDataObj["questionId"]);
       console.log( dataFromQuestionJson ) ;
+      disabled.attr('disabled','disabled');
       socket.emit('publishExistingQuestion',dataFromQuestionJson);//JSON.parse(JSON.stringify(formData)));
+      showSnakbar("Question sent to all the room attendees!");
 
     });
 
@@ -228,6 +341,7 @@
       var formData = $('#addQuestionForm').serializeObject();
       formData["roomID"] = $('#myRoomSelection').val();
       socket.emit('adminAddNewQuestion',JSON.parse(JSON.stringify(formData)));
+      showSnakbar("New question added");
 
     });
 
@@ -257,7 +371,9 @@
       // });
 
       //console.log("serialized json : " + $("#myform").serializeJSON());
+      socket.emit('adminAddNewQuestion',JSON.parse(JSON.stringify(formData)));
       socket.emit('publishNewQuestion',JSON.parse(JSON.stringify(formData)));
+      showSnakbar("New question sent to all the room attendees!");
       //return false;
       // Make AJAX request
     });
