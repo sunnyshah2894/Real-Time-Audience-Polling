@@ -1,3 +1,11 @@
+
+query to add a new column to an existing collection:
+
+db.rooms.update( {} , {$set:{"isFinished":false}} , false , true )
+
+db.rooms.update({'_id': ObjectId("5b130300a01d9611824730ff")} ,{  adminRoomName : "room1-admin",   clientRoomName : "room1",   admin : ObjectId("5b130300a01d9611824730fe"),   created : ISODate("2018-06-03T19:48:04.520Z"),   __v : 0,   currQuestion : ObjectId("5b27e2372c730018f88a8ca5"),isFinished: false ,  hasStarted : true},{  upsert: false})
+-----------------------------------------------------------
+
  var admin1 = new Admin({
    _id: new mongoose.Types.ObjectId(),
    user:{

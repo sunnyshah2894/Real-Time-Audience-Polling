@@ -13,114 +13,173 @@
 <body style="margin-top: 20px;">
 
 <div class="container">
-  <input type="hidden" id="adminID" name="adminID">
-  <select class="custom-select custom-select-lg mb-3" id="myRoomSelection" name="room">
-    <option selected val="Please select the room">Please select the room</option>
-  </select>
+  <div class="row container">
+    <input type="hidden" id="adminID" name="adminID">
+    <select class="custom-select custom-select-lg mb-3 col-12 col-sm-4" id="myRoomSelection" name="room">
+      <option selected val="Please select the room">Please select the room</option>
+    </select>
+    <!-- Button trigger modal -->
 
-  <div class="card">
+    <button type="button" data-toggle="modal" data-target="#addRoomModal" style="float: right;" class="btn btn-primary custom-select-lg col-12 col-sm-4 offset-sm-4">
+      Add new session room
+    </button>
+  </div>
+
+  <div class="card text-center">
     <div class="card-header">
-      Add and Publish a new question
+      <nav>
+        <div class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
+          <a class="btn-lg nav-item nav-link active color-black" id="nav-home-tab" data-toggle="tab" href="#nav-1" role="tab" aria-controls="nav-home" aria-selected="true">Publish new Question</a>
+          <a class="btn-lg nav-item nav-link color-black" id="nav-profile-tab" data-toggle="tab" href="#nav-2" role="tab" aria-controls="nav-profile" aria-selected="false">Add Question</a>
+          <a class="btn-lg nav-item nav-link color-black" id="nav-contact-tab" data-toggle="tab" href="#nav-3" role="tab" aria-controls="nav-contact" aria-selected="false">Publish Pre-Added</a>
+          <a class="btn-lg nav-item nav-link color-black" id="nav-contact-tab" data-toggle="tab" href="#nav-4" role="tab" aria-controls="nav-contact" aria-selected="false">Room Actions</a>
+        </div>
+      </nav>
     </div>
     <div class="card-body">
-      <h5 class="card-title">Add your question below</h5>
-      <p class="card-text">
-        <form id="myform" action="/admin/publishQuestion" method="POST">
-          <div class="form-group">
-            <label class="float-left" for="QuestionString">Enter the new question:</label>
-            <textarea class="form-control" name="questionString" id="QuestionString" rows="3"></textarea>
-          </div>
-          <!-- <input type="text" placeholder="questionString" name="questionString"> -->
-          <div class="form-row">
-            <div class="form-group col-md-6 col-xs-12">
-                <label class="float-left" for="inputPassword4">Option1</label>
-                <input type="text" class="form-control" placeholder="option1" name="option1">
+
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-1" role="tabpanel" aria-labelledby="nav-1-tab">
+      <div class="card">
+        <div class="card-header">
+          Add and Publish a new question
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Add your question below</h5>
+          <p class="card-text">
+            <form id="myform" action="/admin/publishQuestion" method="POST">
+              <div class="form-group">
+                <label class="float-left" for="QuestionString">Enter the new question:</label>
+                <textarea class="form-control" name="questionString" id="QuestionString" rows="3"></textarea>
+              </div>
+              <!-- <input type="text" placeholder="questionString" name="questionString"> -->
+              <div class="form-row">
+                <div class="form-group col-md-6 col-xs-12">
+                    <label class="float-left" for="inputPassword4">Option1</label>
+                    <input type="text" class="form-control" placeholder="option1" name="option1">
+                </div>
+                <div class="form-group col-md-6 col-xs-12">
+                    <label class="float-left" for="inputPassword4">Option2</label>
+                    <input type="text" class="form-control" placeholder="option2" name="option2">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6 col-xs-12">
+                    <label class="float-left" for="inputPassword4">Option3</label>
+                    <input type="text" class="form-control" placeholder="option3" name="option3">
+                </div>
+                <div class="form-group col-md-6 col-xs-12">
+                    <label class="float-left" for="inputPassword4">Option4</label>
+                    <input type="text" class="form-control" placeholder="option4" name="option4">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6 col-xs-12">
+                  <select class="custom-select custom-select-sm" id="answer" name="answer">
+                    <option value="1">option1</option>
+                    <option value="2">option2</option>
+                    <option value="3">option3</option>
+                    <option value="4">option4</option>
+                  </select>
+                </div>
+              </div>
+              <!-- <button id="publishNewQuestion" type="button">Submit</button> -->
+                <div class="form-group col-md-6 col-xs-12">
+                    <input class="btn btn-primary btn-block btn-require-room-selection" disabled type='submit' id='publishNewQuestion' value='Publish' />
+                </div>
+            </form>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="nav-2" role="tabpanel" aria-labelledby="nav-2-tab">
+      <div class="card">
+        <div class="card-header">
+          Add a new question to the Room
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Add your question below</h5>
+          <p class="card-text">
+            <form id="addQuestionForm" action="/admin/addQuestion" method="POST">
+              <div class="form-group">
+                <label class="float-left" for="QuestionString">Enter the new question:</label>
+                <textarea class="form-control" name="questionString" id="QuestionString" rows="3"></textarea>
+              </div>
+              <!-- <input type="text" placeholder="questionString" name="questionString"> -->
+              <div class="form-row">
+                <div class="form-group col-md-6 col-xs-12">
+                    <label class="float-left" for="inputPassword4">Option1</label>
+                    <input type="text" class="form-control" placeholder="option1" name="option1">
+                </div>
+                <div class="form-group col-md-6 col-xs-12">
+                    <label class="float-left" for="inputPassword4">Option2</label>
+                    <input type="text" class="form-control" placeholder="option2" name="option2">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6 col-xs-12">
+                    <label class="float-left" for="inputPassword4">Option3</label>
+                    <input type="text" class="form-control" placeholder="option3" name="option3">
+                </div>
+                <div class="form-group col-md-6 col-xs-12">
+                    <label class="float-left" for="inputPassword4">Option4</label>
+                    <input type="text" class="form-control" placeholder="option4" name="option4">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6 col-xs-12">
+                  <select class="custom-select custom-select-sm" id="answer" name="answer">
+                    <option value="1">option1</option>
+                    <option value="2">option2</option>
+                    <option value="3">option3</option>
+                    <option value="4">option4</option>
+                  </select>
+                </div>
+              </div>
+              <!-- <button id="publishNewQuestion" type="button">Submit</button> -->
+                <div class="form-group col-md-6 col-xs-12">
+                    <input class="btn btn-primary btn-block btn-require-room-selection" disabled type='submit' id='addNewQuestion' value='Add Question' />
+                </div>
+            </form>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="nav-3" role="tabpanel" aria-labelledby="nav-3-tab">
+      <div class="card">
+        <div class="card-header">
+          Publish Existing Questions
+        </div>
+        <div class="card-body">
+          <p class="card-text">
+
+            <div id="publishableQuestions">
+
             </div>
-            <div class="form-group col-md-6 col-xs-12">
-                <label class="float-left" for="inputPassword4">Option2</label>
-                <input type="text" class="form-control" placeholder="option2" name="option2">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-6 col-xs-12">
-                <label class="float-left" for="inputPassword4">Option3</label>
-                <input type="text" class="form-control" placeholder="option3" name="option3">
-            </div>
-            <div class="form-group col-md-6 col-xs-12">
-                <label class="float-left" for="inputPassword4">Option4</label>
-                <input type="text" class="form-control" placeholder="option4" name="option4">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-6 col-xs-12">
-              <select class="custom-select custom-select-sm" id="answer" name="answer">
-                <option value="1">option1</option>
-                <option value="2">option2</option>
-                <option value="3">option3</option>
-                <option value="4">option4</option>
-              </select>
-            </div>
-          </div>
-          <!-- <button id="publishNewQuestion" type="button">Submit</button> -->
-            <div class="form-group col-md-6 col-xs-12">
-                <input class="btn btn-primary btn-block" type='submit' id='publishNewQuestion' value='Publish' />
-            </div>
-        </form>
-      </p>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="nav-4" role="tabpanel" aria-labelledby="nav-4-tab">
+      <div class="card">
+        <div class="card-header">
+          Room Operations
+        </div>
+        <div class="card-body">
+          <p class="card-text">
+            <button type="button" disabled id="startRoom" class="btn btn-success btn-lg btn-block btn-require-room-selection">Start room session</button>
+            <button type="button" disabled id="closeRoom" class="btn btn-warning btn-lg btn-block btn-require-room-selection">Close room session</button>
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-header">
-      Add a new question to the Room
-    </div>
-    <div class="card-body">
-      <h5 class="card-title">Add your question below</h5>
-      <p class="card-text">
-        <form id="addQuestionForm" action="/admin/addQuestion" method="POST">
-          <div class="form-group">
-            <label class="float-left" for="QuestionString">Enter the new question:</label>
-            <textarea class="form-control" name="questionString" id="QuestionString" rows="3"></textarea>
-          </div>
-          <!-- <input type="text" placeholder="questionString" name="questionString"> -->
-          <div class="form-row">
-            <div class="form-group col-md-6 col-xs-12">
-                <label class="float-left" for="inputPassword4">Option1</label>
-                <input type="text" class="form-control" placeholder="option1" name="option1">
-            </div>
-            <div class="form-group col-md-6 col-xs-12">
-                <label class="float-left" for="inputPassword4">Option2</label>
-                <input type="text" class="form-control" placeholder="option2" name="option2">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-6 col-xs-12">
-                <label class="float-left" for="inputPassword4">Option3</label>
-                <input type="text" class="form-control" placeholder="option3" name="option3">
-            </div>
-            <div class="form-group col-md-6 col-xs-12">
-                <label class="float-left" for="inputPassword4">Option4</label>
-                <input type="text" class="form-control" placeholder="option4" name="option4">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-6 col-xs-12">
-              <select class="custom-select custom-select-sm" id="answer" name="answer">
-                <option value="1">option1</option>
-                <option value="2">option2</option>
-                <option value="3">option3</option>
-                <option value="4">option4</option>
-              </select>
-            </div>
-          </div>
-          <!-- <button id="publishNewQuestion" type="button">Submit</button> -->
-            <div class="form-group col-md-6 col-xs-12">
-                <input class="btn btn-primary btn-block" type='submit' id='addNewQuestion' value='Add Question' />
-            </div>
-        </form>
-      </p>
-    </div>
-  </div>
+</div>
+</div>
+
+
+
 
 <!--
   <form id="addQuestionForm" action="/admin/addQuestion" method="POST">
@@ -138,17 +197,35 @@
     <input type='submit' id='addNewQuestion' value='Add' />
   </form> -->
 
-  <div class="card">
-    <div class="card-header">
-      Publish Existing Questions
-    </div>
-    <div class="card-body">
-      <p class="card-text">
-
-        <div id="publishableQuestions">
-
+  <!-- Add room Modal -->
+  <div class="modal fade" id="addRoomModal" tabindex="-1" role="dialog" aria-labelledby="addRoomModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add a new room</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-      </p>
+        <div class="modal-body">
+          <form id="addRoomForm" action="/admin/addNewRoom" method="POST">
+
+              <div class="form-group col-xs-12">
+                  <label class="float-left" for="roomPublicKey">Room Public Key</label>
+                  <input type="text" class="form-control" placeholder="Enter the public key to be used by participants" name="roomPublicKey">
+              </div>
+              <div class="form-group col-xs-12">
+                  <label class="float-left" for="roomPrivateKey">Room Private key</label>
+                  <input type="text" class="form-control" placeholder="Enter the private key for your room control" name="roomPrivateKey">
+              </div>
+
+              <!-- <button id="publishNewQuestion" type="button">Submit</button> -->
+              <div class="form-group col-md-6 col-xs-12">
+                  <input class="btn btn-primary btn-block" type='submit' id='addNewRoom' value='Add' />
+              </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -231,7 +308,7 @@
 
     socket.on("getRooms",function(rooms){
       $('#myRoomSelection option').remove();
-      $('#myRoomSelection').append('<option selected val="Please select the room">Please select the room</option>');
+      $('#myRoomSelection').append('<option selected value="notSelected">Please select the room</option>');
       for (var i = 0; i < rooms.length; i++){
         var obj = rooms[i];
         var roomId = obj['_id'];
@@ -249,7 +326,7 @@
     //socket.emit('joinRoom',roomName);
     // A dialog box is displayed when the server sends us a "message"
     socket.on('message', function(message) {
-      alert('The server has a message for you: ' + message);
+      showSnakbar(message);
     })
     var questionsInRoom = {};
     socket.on('questionsAlreadyInRoom',function(questions){
@@ -315,6 +392,13 @@
         roomName: value,
         roomID: roomId
       };
+      
+      if( roomId == 'notSelected' ){
+        $('.btn-require-room-selection').attr("disabled", true);
+      }
+      else {
+        $('.btn-require-room-selection').attr("disabled", false);
+      }
       socket.emit('serverJoinRoom',roomDetails);
     });
 
@@ -343,6 +427,38 @@
       formData["roomID"] = $('#myRoomSelection').val();
       socket.emit('adminAddNewQuestion',JSON.parse(JSON.stringify(formData)));
       showSnakbar("New question added");
+
+    });
+
+    $('#startRoom').click(function(e){
+      e.preventDefault();
+      var roomID = $('#myRoomSelection').val();
+      socket.emit( 'startRoom' , roomID );
+    });
+
+    $('#closeRoom').click( function(e){
+      e.preventDefault();
+      var roomID = $('#myRoomSelection').val();
+      socket.emit( 'closeRoom' , roomID );
+    });
+
+    socket.on('invalidRoomAddition' , function(message){
+      showSnakbar(message);
+    });
+
+    socket.on( 'newRoomAdded' , function(roomData){
+        console.log("new Room Added!");
+        $('#myRoomSelection').append( '<option value="'+ roomData._id +'">' + roomData.adminRoomName + '</option>' );
+        showSnakbar("Successfully created new room - " + roomData.adminRoomName);
+    });
+
+    $('#addNewRoom').click(function(e){
+
+      e.preventDefault();
+      var formData = $('#addRoomForm').serializeObject();
+      console.log(JSON.parse(JSON.stringify(formData)));
+      socket.emit('adminAddRoom',JSON.parse(JSON.stringify(formData)));
+      $('#addRoomModal').modal('hide');
 
     });
 

@@ -13,6 +13,7 @@ var roomSchema = mongoose.Schema({
       ref: 'Admin'
     },
     isFinished: Boolean,
+    hasStarted: Boolean,
     currQuestion: mongoose.Schema.Types.ObjectId
 
 });

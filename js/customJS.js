@@ -59,9 +59,14 @@ $(document).ready(function () {
 
 
     socket.on('refresh',function(message){
-
       location.reload();
+    });
 
+    socket.on('messageSessionNotStarted' , function(message){
+      showSnakbar(message);
+    });
+    socket.on('messageSessionEnd' , function(message){
+      showSnakbar(message);
     });
 
     // A dialog box is displayed when the server sends us a "message"
@@ -87,12 +92,12 @@ $(document).ready(function () {
 
     });
 
-    function showSnakbar() {
-        var x = document.getElementById("snackbar")
+    function showSnakbar(messageToShow) {
+        var x = document.getElementById("snackbar");
+        $('#snackbar').html(messageToShow);
         x.className = "show";
         setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
     }
-
 
     $('[id^=option]').click(function(e){
       e.preventDefault();
@@ -110,7 +115,7 @@ $(document).ready(function () {
         console.log( questionsAnswered );
       }
       socket.emit("answer",answerObj);
-      showSnakbar();
+      showSnakbar("Thanks for answering!");
       //setTimeout(function(){location.reload();},3000);
       $(".bg_load").fadeIn("slow");
       $(".wrapper").fadeIn("slow");

@@ -202,3 +202,7 @@ body {
 .clickable:hover{
   background-color: #dddddd;
 }
+
+.color-black{
+  color: black !important;
+}
