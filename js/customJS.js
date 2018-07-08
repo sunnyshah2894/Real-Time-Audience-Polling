@@ -4,7 +4,6 @@ $(document).ready(function () {
     var currRoomJoined ;
 
     socket.on('customRetry', function() {
-      alert("check2");
       customConnect();
     });
 
