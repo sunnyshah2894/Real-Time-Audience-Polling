@@ -250,7 +250,7 @@
   <script src="//code.jquery.com/jquery-1.10.1.min.js"></script>
   <script src="./bootstrap/dist/js/bootstrap.min.js"></script>
   <!-- <script src="/socket.io/socket.io.js"></script> -->
-  <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
   <script>
 
   $.fn.serializeObject = function()
@@ -340,6 +340,14 @@
       location.reload();
 
     });
+
+    socket.on('disconnect' , function(message){
+      var x = document.getElementById("snackbar");
+      $('#snackbar').html("You are disconnected! Please refresh to join again.");
+      x.className = "show";
+      socket.disconnect();
+    });
+    
     socket.on('answerByUser',function(user){
 
       console.log(user);
@@ -392,7 +400,7 @@
         roomName: value,
         roomID: roomId
       };
-      
+
       if( roomId == 'notSelected' ){
         $('.btn-require-room-selection').attr("disabled", true);
       }

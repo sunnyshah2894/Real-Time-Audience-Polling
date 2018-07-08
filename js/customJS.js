@@ -1,14 +1,41 @@
 $(document).ready(function () {
 
     var socket = io.connect();
-    console.log('check 1', socket.connected);
-    socket.on('connect', function() {
-      console.log('check 2', socket.connected);
+    var currRoomJoined ;
+
+    socket.on('customRetry', function() {
+      alert("check2");
+      customConnect();
     });
+
+    function customConnect(localStorageAvailable){
+      var username = null;
+      console.log("checking usernae");
+      if (localStorageAvailable) {
+
+          if (localStorage.getItem("username") === null) {
+              $('#myUsernameChooserModal').modal();
+          }
+          else{
+              username = localStorage.getItem("username");
+              socket.emit('setUsername', username);
+          }
+      } else {
+          //username = prompt('What\'s your username?');
+          $('#myUsernameChooserModal').modal();
+      }
+      if( currRoomJoined ){
+          $('#joinRoom').click();
+      }
+      else {
+          $('#myRoomChooserModal').modal();
+      }
+    }
     var localStorageAvailable = false;
     if (typeof(Storage) !== "undefined") {
       localStorageAvailable = true;
     }
+    customConnect(localStorageAvailable);
 
     var questionsAnswered = [];
     if(localStorageAvailable){
@@ -27,6 +54,7 @@ $(document).ready(function () {
 
     $('#joinRoom').click(function(e){
       var roomName = $('#roomName').val();
+      currRoomJoined = roomName;
       console.log("join room " + roomName);
       socket.emit('clientJoinRoom',roomName);
       $('#myRoomChooserModal').modal('hide');
@@ -39,23 +67,8 @@ $(document).ready(function () {
       socket.emit('setUsername', userID);
       $('#myUsernameChooserModal').modal('hide');
     });
-    // It's sent with the signal "little_newbie" (to differentiate it from "message")
-    var username = null;
-    console.log("checking usernae");
-    if (localStorageAvailable) {
 
-        if (localStorage.getItem("username") === null) {
-            $('#myUsernameChooserModal').modal();
-        }
-        else{
-            username = localStorage.getItem("username");
-            socket.emit('setUsername', username);
-        }
-    } else {
-        //username = prompt('What\'s your username?');
-        $('#myUsernameChooserModal').modal();
-    }
-    $('#myRoomChooserModal').modal();
+
 
 
     socket.on('refresh',function(message){
@@ -68,7 +81,12 @@ $(document).ready(function () {
     socket.on('messageSessionEnd' , function(message){
       showSnakbar(message);
     });
-
+    socket.on('disconnect' , function(message){
+      var x = document.getElementById("snackbar");
+      $('#snackbar').html("You are disconnected! Please refresh to join again.");
+      x.className = "show";
+      socket.disconnect();
+    });
     // A dialog box is displayed when the server sends us a "message"
     socket.on('questionAvailable', function(message) {
 
