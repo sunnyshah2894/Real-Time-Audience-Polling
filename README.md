@@ -43,12 +43,8 @@ PS: Sorry for the bad filenames.
 
 ## About the web app
 
-(http://localhost:8080/) --> This is where your audience will connect. On opening the page, audience will have to enter the public key.
-(http://localhost:8080/admin) --> This will be used by the administrator of the presentation to control what questions to publish to the participants.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+- (http://localhost:8080/) --> This is where your audience will connect. On opening the page, audience will have to enter the public key.
+- (http://localhost:8080/admin) --> This will be used by the administrator of the presentation to control what questions to publish to the participants.
 
 ## Authors
 
